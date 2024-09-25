@@ -1,0 +1,19 @@
+
+version: '3'
+services:
+  photobot:
+    container_name: photobot
+    build: .
+    environment:
+        DISPLAY: ${DISPLAY}                  # Нужно для запуска графического интерфейса Rqt из контейнера
+        LIDAR_IP_ADDRESS: 192.168.1.100      # IP-адрес лидара
+        LIDAR_SCANNER_TYPE: sick_mrs_1xxx    # Модель лидара
+        USB_CAMERA_DEVICE_NUMBER: 0          # Номер устройства камеры, допустим для /dev/video0 это будет 0
+        GPS_DEVICE_PATH: /dev/ttyUSB0        # Путь к серийному порту, к которому подключен GPS-приемник
+        ODRIVE_CAN_INTERFACE: can0           # Названия CAN-интерфейса, к которым подключены конроллеры двигателей колес
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix        # Нужно для запуска графического интерфейса Rqt из контейнера
+      - /dev/video0:/dev/video0              # Нужно для доступа к USB-камере из контейнера
+    ports:
+      - 2022:22                              # Порт для доступа к контейнеру по SSH - 2022
+    privileged: true                         # Нужно для доступа к USB-камере из контейнера
